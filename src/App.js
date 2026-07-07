@@ -5,7 +5,9 @@ import Appstore from "./Redux/Appstore";
 function App() {
   return (
     <Provider store={Appstore}>
-      <Body />
+      <div className="min-h-screen bg-black text-white">
+        <Body />
+      </div>
     </Provider>
   );
 }
