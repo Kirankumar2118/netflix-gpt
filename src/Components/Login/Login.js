@@ -1,72 +1,95 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
+import { checkValidData } from "../../Utils/Validate";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  updateProfile,
+} from "firebase/auth";
+import { auth } from "../../Utils/Firebase";
+import LoginForm from "./LoginForm";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addUser } from "../../Redux/Userslice";
 
 const Login = () => {
   const [isSignIn, setisSignIn] = useState(true);
+  const [errormessage, seterrormessage] = useState("");
+  const name = useRef(null);
+  const email = useRef(null);
+  const password = useRef(null);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const toggleSignInForm = () => {
     setisSignIn(!isSignIn);
   };
+
+  const handleButtonClick = () => {
+    const message = checkValidData(email.current.value, password.current.value);
+    seterrormessage(message);
+    if (message) return;
+
+    if (!isSignIn) {
+      createUserWithEmailAndPassword(
+        auth,
+        email.current.value,
+        password.current.value,
+      )
+        .then((userCredential) => {
+          const user = userCredential.user;
+          updateProfile(auth.currentUser, {
+            displayName: name.current.value,
+            photoURL:
+              "https://wallpapers.com/images/hd/netflix-profile-pictures-1000-x-1000-qo9h82134t9nv0j0.jpg",
+          })
+            .then(() => {
+              const { uid, email, displayName, photoURL } = auth.currentUser;
+              dispatch(
+                addUser({
+                  uid: uid,
+                  email: email,
+                  displayName: displayName,
+                  photoURL: photoURL,
+                }),
+              );
+              navigate("/browse");
+            })
+            .catch((error) => {
+              seterrormessage(error.message);
+            });
+        })
+        .catch((error) => {
+          const errorMessage = error.message;
+          seterrormessage(errorMessage);
+        });
+    } else {
+      signInWithEmailAndPassword(
+        auth,
+        email.current.value,
+        password.current.value,
+      )
+        .then((userCredential) => {
+          const user = userCredential.user;
+          navigate("/browse");
+
+          // ...
+        })
+        .catch((error) => {
+          const errorMessage = error.message;
+          seterrormessage(errorMessage);
+        });
+    }
+  };
   return (
-    <form
-      className="
-            w-full
-            max-w-[450px]
-            bg-[rgba(0,0,0,0.55)]
-            backdrop-blur-sm
-            rounded
-            px-6
-            py-8
-            sm:px-10
-            sm:py-12
-            md:px-16
-            md:py-14
-          "
-    >
-      <h1 className="text-white text-3xl md:text-4xl font-bold mb-8">
-        {isSignIn ? "Sign In" : "Sign Up"}
-      </h1>
-      {!isSignIn && (
-        <input
-          type="text"
-          placeholder="Username"
-          className="w-full h-14 px-4 mb-4 rounded bg-[#2f2f2f] border border-[#5a5a5a] text-white placeholder:text-gray-400 focus:outline-none focus:border-white"
-        />
-      )}
-      <input
-        type="text"
-        placeholder="Email or phone number"
-        className="w-full h-14 px-4 mb-4 rounded bg-[#2f2f2f] border border-[#5a5a5a] text-white placeholder:text-gray-400 focus:outline-none focus:border-white"
-      />
-
-      <input
-        type="password"
-        placeholder="Password"
-        className="w-full h-14 px-4 mb-6 rounded bg-[#2f2f2f] border border-[#5a5a5a] text-white placeholder:text-gray-400 focus:outline-none focus:border-white"
-      />
-
-      <button className="w-full h-12 rounded bg-[#E50914] hover:bg-[#C11119] text-white font-semibold transition">
-        {isSignIn ? "Sign In" : "Sign Up"}
-      </button>
-
-      <div className="flex justify-between items-center mt-6 text-sm text-gray-300">
-        <label className="flex items-center gap-2 cursor-pointer">
-          <input type="checkbox" className="accent-white w-4 h-4" />
-          Remember me
-        </label>
-
-        <p className="hover:underline cursor-pointer">Need help?</p>
-      </div>
-
-      <p className="mt-10 text-gray-400">
-        {isSignIn ? "New to Netflix? " : "already registerd."}
-        <span
-          className="text-white font-medium hover:underline cursor-pointer"
-          onClick={toggleSignInForm}
-        >
-          {isSignIn ? "Sign up now." : "Sign in now."}
-        </span>
-      </p>
-    </form>
+    <LoginForm
+      isSignIn={isSignIn}
+      name={name}
+      email={email}
+      password={password}
+      errormessage={errormessage}
+      toggleSignInForm={toggleSignInForm}
+      handleButtonClick={handleButtonClick}
+    />
   );
 };
 
