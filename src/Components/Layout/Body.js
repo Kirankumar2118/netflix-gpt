@@ -9,25 +9,25 @@ import { addUser, removeUser } from "../../Redux/Userslice";
 const Body = () => {
   const dispatch = useDispatch();
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         const { uid, email, displayName, photoURL } = user;
+
         dispatch(
           addUser({
-            uid: uid,
-            email: email,
-            displayName: displayName,
-            photoURL: photoURL,
+            uid,
+            email,
+            displayName,
+            photoURL,
           }),
         );
-        // ...
       } else {
-        // User is signed out
-        // ...
         dispatch(removeUser());
       }
     });
-  }, []);
+
+    return unsubscribe;
+  }, [dispatch]);
 
   return (
     <div>

@@ -7,9 +7,9 @@ import {
 } from "firebase/auth";
 import { auth } from "../../Utils/Firebase";
 import LoginForm from "./LoginForm";
-import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addUser } from "../../Redux/Userslice";
+import { photoURL } from "../../Utils/constant";
 
 const Login = () => {
   const [isSignIn, setisSignIn] = useState(true);
@@ -17,7 +17,6 @@ const Login = () => {
   const name = useRef(null);
   const email = useRef(null);
   const password = useRef(null);
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const toggleSignInForm = () => {
@@ -36,11 +35,9 @@ const Login = () => {
         password.current.value,
       )
         .then((userCredential) => {
-          const user = userCredential.user;
           updateProfile(auth.currentUser, {
             displayName: name.current.value,
-            photoURL:
-              "https://wallpapers.com/images/hd/netflix-profile-pictures-1000-x-1000-qo9h82134t9nv0j0.jpg",
+            photoURL: photoURL,
           })
             .then(() => {
               const { uid, email, displayName, photoURL } = auth.currentUser;
@@ -52,7 +49,6 @@ const Login = () => {
                   photoURL: photoURL,
                 }),
               );
-              navigate("/browse");
             })
             .catch((error) => {
               seterrormessage(error.message);
@@ -69,9 +65,6 @@ const Login = () => {
         password.current.value,
       )
         .then((userCredential) => {
-          const user = userCredential.user;
-          navigate("/browse");
-
           // ...
         })
         .catch((error) => {

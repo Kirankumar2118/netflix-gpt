@@ -1,15 +1,26 @@
-import React from "react";
 import { createBrowserRouter } from "react-router-dom";
 
-import BrowsePage from "../../Pages/BrowsePage";
 import LoginPage from "../../Pages/LoginPage";
+import BrowsePage from "../../Pages/BrowsePage";
+
+import ProtectedRoute from "./ProtectedRoute";
+import PublicRoute from "./PublicRoute";
+
 export const appRouter = createBrowserRouter([
   {
     path: "/",
-    element: <LoginPage />,
+    element: (
+      <PublicRoute>
+        <LoginPage />
+      </PublicRoute>
+    ),
   },
   {
     path: "/browse",
-    element: <BrowsePage />,
+    element: (
+      <ProtectedRoute>
+        <BrowsePage />
+      </ProtectedRoute>
+    ),
   },
 ]);

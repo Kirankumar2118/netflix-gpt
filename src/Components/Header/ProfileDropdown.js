@@ -9,9 +9,7 @@ export default function ProfileDropdown() {
   const navigate = useNavigate();
   const onSignOut = () => {
     signOut(auth)
-      .then(() => {
-        navigate("/");
-      })
+      .then(() => {})
       .catch((error) => {
         navigate("/error");
       });

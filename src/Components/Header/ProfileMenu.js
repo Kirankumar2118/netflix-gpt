@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import ProfileDropdown from "./ProfileDropdown";
+import { useSelector } from "react-redux";
 
 export default function ProfileMenu() {
   const [open, setOpen] = useState(false);
+  const user = useSelector((store) => store.user);
 
   const ref = useRef();
 
@@ -22,7 +24,7 @@ export default function ProfileMenu() {
     <div className="relative" ref={ref}>
       <img
         onClick={() => setOpen(!open)}
-        src="https://wallpapers.com/images/hd/netflix-profile-pictures-1000-x-1000-qo9h82134t9nv0j0.jpg"
+        src={user?.photoURL}
         className="w-7 rounded cursor-pointer"
         alt="profileimage"
       />

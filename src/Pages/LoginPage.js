@@ -2,13 +2,14 @@ import React from "react";
 import Header from "../Components/Login/Header";
 import Login from "../Components/Login/Login";
 import Footer from "../Components/Login/Footer";
+import { BACKGROUND } from "../Utils/constant";
 
 const LoginPage = () => {
   return (
     <>
       <div className="relative min-h-screen overflow-hidden">
         <img
-          src="https://assets.nflxext.com/ffe/siteui/vlv3/2f42605e-e786-4a06-8612-ebc67c55ba6c/web/IN-en-20260629-TRIFECTA-perspective_76b17e8c-cff9-4c65-9938-08ca5029be6b_small.jpg"
+          src={BACKGROUND}
           alt="Netflix Background"
           className="absolute inset-0 h-full w-full object-cover"
         />
