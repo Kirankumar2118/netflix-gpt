@@ -14,3 +14,18 @@ body,
 body {
   overflow-x: hidden;
 }
+
+/* Hide scrollbar for Chrome, Safari and Edge */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for Firefox */
+.scrollbar-hide {
+  scrollbar-width: none;
+}
+
+/* Hide scrollbar for IE and old Edge */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+}

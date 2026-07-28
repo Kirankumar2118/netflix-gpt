@@ -1,17 +1,22 @@
 import React from "react";
 import Head from "../Components/Header/Head";
-import useNowplayingmovies from "../Hooks/useNowplayingmovies";
 import Maincontainer from "../Components/browse/maincontainer/Maincontainer";
-import Secondaryconatiner from "../Components/browse/Secondarycontainer/Secondarycontainer";
+import SecondaryContainer from "../Components/browse/Secondarycontainer/Secondarycontainer";
+import useNowplayingmovies from "../Hooks/useNowplayingmovies";
 
 const BrowsePage = () => {
   useNowplayingmovies();
+
   return (
-    <div>
+    <main className="min-h-screen bg-black">
       <Head />
+
+      {/* Hero Section */}
       <Maincontainer />
-      <Secondaryconatiner />
-    </div>
+
+      {/* Movie Sections */}
+      <SecondaryContainer />
+    </main>
   );
 };
 

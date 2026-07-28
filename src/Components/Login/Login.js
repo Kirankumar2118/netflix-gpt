@@ -9,7 +9,7 @@ import { auth } from "../../Utils/Firebase";
 import LoginForm from "./LoginForm";
 import { useDispatch } from "react-redux";
 import { addUser } from "../../Redux/Userslice";
-import { photoURL } from "../../Utils/constant";
+import { PHOTOURL } from "../../Utils/constant";
 
 const Login = () => {
   const [isSignIn, setisSignIn] = useState(true);
@@ -37,7 +37,7 @@ const Login = () => {
         .then((userCredential) => {
           updateProfile(auth.currentUser, {
             displayName: name.current.value,
-            photoURL: photoURL,
+            photoURL: PHOTOURL,
           })
             .then(() => {
               const { uid, email, displayName, photoURL } = auth.currentUser;

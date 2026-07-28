@@ -21,25 +21,6 @@ const footerLinks = [
 const Footer = () => {
   return (
     <footer className="bg-black text-gray-400 px-6 md:px-20 lg:px-40 py-16">
-      {/* Email Section */}
-      <div className="max-w-4xl mx-auto">
-        <p className="text-center text-white text-lg mb-6">
-          Ready to watch? Enter your email to create or restart your membership.
-        </p>
-
-        <div className="flex flex-col sm:flex-row gap-3">
-          <input
-            type="email"
-            placeholder="Email address"
-            className="flex-1 h-14 px-4 rounded border border-gray-600 bg-[#111] text-white placeholder:text-gray-400 focus:outline-none focus:border-white"
-          />
-
-          <button className="h-14 px-8 bg-[#E50914] hover:bg-[#C11119] rounded text-white text-xl font-semibold transition">
-            Get Started &gt;
-          </button>
-        </div>
-      </div>
-
       {/* Contact */}
       <div className="mt-20">
         <p className="mb-10">

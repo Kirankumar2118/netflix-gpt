@@ -11,24 +11,25 @@ const Maincontainer = () => {
   const [mainMovie, setMainMovie] = useState(null);
 
   useEffect(() => {
-    if (!movies) return;
+    if (!movies?.length) return;
 
-    const randomIndex = Math.floor(Math.random() * movies.length);
-    setMainMovie(movies[randomIndex]);
+    const randomMovie = movies[Math.floor(Math.random() * movies.length)];
+
+    setMainMovie(randomMovie);
   }, [movies]);
 
   if (!mainMovie) return null;
 
-  const { title, overview, id } = mainMovie;
+  const { id, title, overview } = mainMovie;
 
   return (
-    <div className="relative h-screen">
+    <section className="relative min-h-screen w-full overflow-hidden bg-black">
       <Videoplay movieid={id} />
 
       <div className="absolute inset-0 z-20">
-        <Vediotitle title={title} overview={overview} />
+        <Vediotitle title={title} overview={overview} id={id} />
       </div>
-    </div>
+    </section>
   );
 };
 

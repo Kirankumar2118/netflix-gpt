@@ -5,6 +5,9 @@ import BrowsePage from "../../Pages/BrowsePage";
 
 import ProtectedRoute from "./ProtectedRoute";
 import PublicRoute from "./PublicRoute";
+import Explorer from "../../Pages/Explorer";
+import SearchResult from "../../Pages/SearchResult";
+import Details from "../../Pages/Details ";
 
 export const appRouter = createBrowserRouter([
   {
@@ -20,6 +23,31 @@ export const appRouter = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <BrowsePage />
+      </ProtectedRoute>
+    ),
+  },
+
+  {
+    path: "/explorer/:mediaType",
+    element: (
+      <ProtectedRoute>
+        <Explorer />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/search/:query",
+    element: (
+      <ProtectedRoute>
+        <SearchResult />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/:mediaType/:id",
+    element: (
+      <ProtectedRoute>
+        <Details />
       </ProtectedRoute>
     ),
   },

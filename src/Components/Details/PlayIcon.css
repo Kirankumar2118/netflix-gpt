@@ -1,0 +1,25 @@
+.triangle {
+  stroke-dasharray: 240;
+  stroke-dashoffset: 480;
+  transition:
+    stroke-dashoffset 0.7s ease,
+    stroke 0.7s ease;
+}
+
+.circle {
+  stroke-dasharray: 650;
+  stroke-dashoffset: 1300;
+  transition:
+    stroke-dashoffset 0.5s ease,
+    stroke 0.5s ease;
+}
+
+.group:hover .triangle {
+  stroke-dashoffset: 0;
+  stroke: #ef4444;
+}
+
+.group:hover .circle {
+  stroke-dashoffset: 0;
+  stroke: #ef4444;
+}
