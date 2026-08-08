@@ -169,50 +169,9 @@ npm start
 
 The application will run locally on your development server.
 
-## ⚠️ API Key Security
 
-Do not commit API keys, Firebase secrets, or other credentials to
-GitHub.
 
-Use environment variables for production applications.
 
-Example:
-
-``` env
-TMDB_API_KEY=your_tmdb_api_key
-GEMINI_API_KEY=your_gemini_api_key
-```
-
-Add your environment file to `.gitignore`:
-
-``` text
-.env
-.env.local
-```
-
-## 🎯 Future Improvements
-
--   Better AI recommendation accuracy
--   User watchlist
--   Favorite movies
--   Movie search filters
--   More detailed movie information
--   Improved error handling
--   Performance optimization
--   Backend API for securely handling AI requests
-
-## 📌 Project Status
-
-🚧 **Actively developed**
-
-This project is being continuously improved with new features, UI
-enhancements, and performance optimizations.
-
-## 👨‍💻 Author
-
-**Kiran Kumar**
-
-------------------------------------------------------------------------
 
 ⭐ If you find this project useful, consider giving the repository a
 star!
