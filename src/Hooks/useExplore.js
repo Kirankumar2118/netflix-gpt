@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import useFetch from "./useFetch";
@@ -17,15 +17,21 @@ const useExplore = () => {
 
   const { data: genresData } = useFetch(`/genre/${mediaType}/list`);
 
-  const fetchInitialData = async (customFilters = filters) => {
-    setLoading(true);
+  const fetchInitialData = useCallback(
+    async (customFilters = {}) => {
+      setLoading(true);
 
-    const res = await fetchDatafromApi(`/discover/${mediaType}`, customFilters);
+      const res = await fetchDatafromApi(
+        `/discover/${mediaType}`,
+        customFilters,
+      );
 
-    setMovies(res);
-    setPageNum(2);
-    setLoading(false);
-  };
+      setMovies(res);
+      setPageNum(2);
+      setLoading(false);
+    },
+    [mediaType],
+  );
 
   const fetchNextPage = async () => {
     const res = await fetchDatafromApi(
@@ -65,7 +71,7 @@ const useExplore = () => {
     setFilters({});
 
     fetchInitialData({});
-  }, [mediaType]);
+  }, [mediaType, fetchInitialData]);
 
   return {
     movies,
