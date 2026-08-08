@@ -14,39 +14,39 @@ const Body = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    const fetchApiConfiguration = async () => {
+      const data = await fetchDatafromApi("/configuration");
+
+      dispatch(
+        getApiConfiguration({
+          backdrop: data.images.secure_base_url + "original",
+          poster: data.images.secure_base_url + "original",
+          profile: data.images.secure_base_url + "original",
+        }),
+      );
+    };
+
+    const genresCall = async () => {
+      const endpoints = ["tv", "movie"];
+
+      const responses = await Promise.all(
+        endpoints.map((type) => fetchDatafromApi(`/genre/${type}/list`)),
+      );
+
+      const allGenres = {};
+
+      responses.forEach(({ genres }) => {
+        genres.forEach((genre) => {
+          allGenres[genre.id] = genre;
+        });
+      });
+
+      dispatch(getGenerse(allGenres));
+    };
+
     fetchApiConfiguration();
     genresCall();
-  }, []);
-
-  const fetchApiConfiguration = async () => {
-    const data = await fetchDatafromApi("/configuration");
-
-    dispatch(
-      getApiConfiguration({
-        backdrop: data.images.secure_base_url + "original",
-        poster: data.images.secure_base_url + "original",
-        profile: data.images.secure_base_url + "original",
-      }),
-    );
-  };
-
-  const genresCall = async () => {
-    const endpoints = ["tv", "movie"];
-
-    const responses = await Promise.all(
-      endpoints.map((type) => fetchDatafromApi(`/genre/${type}/list`)),
-    );
-
-    const allGenres = {};
-
-    responses.forEach(({ genres }) => {
-      genres.forEach((genre) => {
-        allGenres[genre.id] = genre;
-      });
-    });
-
-    dispatch(getGenerse(allGenres));
-  };
+  }, [dispatch]);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -54,6 +54,8 @@ const Body = () => {
         await user.reload();
 
         const updatedUser = auth.currentUser;
+
+        if (!updatedUser) return;
 
         dispatch(
           addUser({
