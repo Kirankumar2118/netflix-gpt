@@ -3,6 +3,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import dayjs from "dayjs";
+
 import ContentWrapper from "./ContentWrapper";
 import PosterFallback from "../Assets/no-poster.png";
 import Img from "./Img";
@@ -38,31 +39,42 @@ const Carousel = ({ data = [], loading, endpoint, title }) => {
     </div>
   );
 
+  // Remove duplicate movies
+  const uniqueMovies = data.filter(
+    (movie, index, self) =>
+      movie?.id && index === self.findIndex((item) => item?.id === movie.id),
+  );
+
   return (
-    <section className="relative mb-14">
+    <section className="relative w-full py-4 sm:py-6">
       <ContentWrapper>
+        {/* Title */}
         {title && (
-          <h2 className="mb-6 text-2xl font-semibold text-white">{title}</h2>
+          <h2 className="mb-4 text-xl font-bold text-white sm:mb-5 sm:text-2xl md:text-3xl">
+            {title}
+          </h2>
         )}
 
-        {!loading && data.length > 5 && (
+        {/* Navigation buttons */}
+        {!loading && uniqueMovies.length > 5 && (
           <>
             <button
               onClick={() => navigation("left")}
-              className="absolute left-0 top-1/2 z-20 hidden -translate-y-1/2 rounded-full bg-black/60 p-2 transition hover:bg-black md:flex"
+              className="absolute left-0 top-1/2 z-20 hidden -translate-y-1/2 rounded-full bg-black/70 p-2 transition hover:bg-black md:flex"
             >
-              <ChevronLeft size={32} className="text-white" />
+              <ChevronLeft size={28} className="text-white" />
             </button>
 
             <button
               onClick={() => navigation("right")}
-              className="absolute right-0 top-1/2 z-20 hidden -translate-y-1/2 rounded-full bg-black/60 p-2 transition hover:bg-black md:flex"
+              className="absolute right-0 top-1/2 z-20 hidden -translate-y-1/2 rounded-full bg-black/70 p-2 transition hover:bg-black md:flex"
             >
-              <ChevronRight size={32} className="text-white" />
+              <ChevronRight size={28} className="text-white" />
             </button>
           </>
         )}
 
+        {/* Loading */}
         {loading ? (
           <div className="flex gap-4 overflow-hidden">
             {Array.from({ length: 6 }).map((_, index) => (
@@ -73,12 +85,19 @@ const Carousel = ({ data = [], loading, endpoint, title }) => {
           <div className="relative overflow-hidden">
             <div
               ref={carouselRef}
-              className="flex gap-4  overflow-x-auto scrollbar-hide  scroll-smooth"
+              className="flex gap-4 overflow-x-auto pb-3 scroll-smooth scrollbar-hide"
             >
-              {data.map((item) => {
-                const poster = item.poster_path
-                  ? url.poster + item.poster_path
+              {uniqueMovies.map((item) => {
+                const poster = item?.poster_path
+                  ? url?.poster + item.poster_path
                   : PosterFallback;
+
+                const rating =
+                  typeof item?.vote_average === "number"
+                    ? item.vote_average.toFixed(1)
+                    : "0.0";
+
+                const releaseDate = item?.release_date || item?.first_air_date;
 
                 return (
                   <div
@@ -86,32 +105,36 @@ const Carousel = ({ data = [], loading, endpoint, title }) => {
                     onClick={() =>
                       navigate(`/${item.media_type || endpoint}/${item.id}`)
                     }
-                    className="w-36 flex-shrink-0 cursor-pointer transition-all duration-300 hover:scale-95 sm:w-40 md:w-44 lg:w-52"
+                    className="w-36 flex-shrink-0 cursor-pointer transition-transform duration-300 hover:scale-95 sm:w-40 md:w-44 lg:w-48"
                   >
+                    {/* Poster */}
                     <div className="relative aspect-[2/3] overflow-hidden rounded-xl">
                       <Img
                         src={poster}
                         className="h-full w-full object-cover"
                       />
 
-                      <div className="absolute top-2 left-2 z-10">
-                        <CircleRating rating={item.vote_average.toFixed(1)} />
+                      {/* Rating */}
+                      <div className="absolute left-2 top-2 z-10">
+                        <CircleRating rating={rating} />
                       </div>
 
+                      {/* Genres */}
                       <div className="absolute bottom-2 right-2 z-10 hidden md:block">
-                        <Genres data={item.genre_ids?.slice(0, 2)} />
+                        <Genres data={item?.genre_ids?.slice(0, 2) || []} />
                       </div>
                     </div>
 
+                    {/* Movie info */}
                     <div className="mt-3">
-                      <h3 className="truncate text-base font-semibold text-white md:text-lg">
-                        {item.title || item.name}
+                      <h3 className="truncate text-sm font-semibold text-white sm:text-base">
+                        {item?.title || item?.name}
                       </h3>
 
-                      <p className="mt-1 text-sm text-gray-400">
-                        {dayjs(item.release_date || item.first_air_date).format(
-                          "MMM D, YYYY",
-                        )}
+                      <p className="mt-1 text-xs text-gray-400 sm:text-sm">
+                        {releaseDate
+                          ? dayjs(releaseDate).format("MMM D, YYYY")
+                          : "Release date unavailable"}
                       </p>
                     </div>
                   </div>

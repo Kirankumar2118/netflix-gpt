@@ -1,85 +1,68 @@
-import React, { useRef, useState } from "react";
-import { checkValidData } from "../../Utils/Validate";
+import { useRef, useState } from "react";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   updateProfile,
 } from "firebase/auth";
 import { auth } from "../../Utils/Firebase";
-import LoginForm from "./LoginForm";
-import { useDispatch } from "react-redux";
-import { addUser } from "../../Redux/Userslice";
+import { checkValidData } from "../../Utils/Validate";
 import { PHOTOURL } from "../../Utils/constant";
+import LoginForm from "./LoginForm";
 
 const Login = () => {
-  const [isSignIn, setisSignIn] = useState(true);
-  const [errormessage, seterrormessage] = useState("");
+  const [isSignIn, setIsSignIn] = useState(true);
+  const [errorMessage, setErrorMessage] = useState("");
+
   const name = useRef(null);
   const email = useRef(null);
   const password = useRef(null);
-  const dispatch = useDispatch();
 
   const toggleSignInForm = () => {
-    setisSignIn(!isSignIn);
+    setIsSignIn((prev) => !prev);
+    setErrorMessage("");
   };
 
-  const handleButtonClick = () => {
+  const handleButtonClick = async () => {
     const message = checkValidData(email.current.value, password.current.value);
-    seterrormessage(message);
+
+    setErrorMessage(message);
+
     if (message) return;
 
-    if (!isSignIn) {
-      createUserWithEmailAndPassword(
-        auth,
-        email.current.value,
-        password.current.value,
-      )
-        .then((userCredential) => {
-          updateProfile(auth.currentUser, {
-            displayName: name.current.value,
-            photoURL: PHOTOURL,
-          })
-            .then(() => {
-              const { uid, email, displayName, photoURL } = auth.currentUser;
-              dispatch(
-                addUser({
-                  uid: uid,
-                  email: email,
-                  displayName: displayName,
-                  photoURL: photoURL,
-                }),
-              );
-            })
-            .catch((error) => {
-              seterrormessage(error.message);
-            });
-        })
-        .catch((error) => {
-          const errorMessage = error.message;
-          seterrormessage(errorMessage);
+    try {
+      if (!isSignIn) {
+        const userCredential = await createUserWithEmailAndPassword(
+          auth,
+          email.current.value,
+          password.current.value,
+        );
+
+        await updateProfile(userCredential.user, {
+          displayName: name.current.value,
+          photoURL: PHOTOURL,
         });
-    } else {
-      signInWithEmailAndPassword(
-        auth,
-        email.current.value,
-        password.current.value,
-      )
-        .then((userCredential) => {
-          // ...
-        })
-        .catch((error) => {
-          const errorMessage = error.message;
-          seterrormessage(errorMessage);
-        });
+
+        // Refresh the user so onAuthStateChanged receives updated profile
+        await userCredential.user.reload();
+      } else {
+        await signInWithEmailAndPassword(
+          auth,
+          email.current.value,
+          password.current.value,
+        );
+      }
+    } catch (error) {
+      setErrorMessage(error.message);
     }
   };
+
   return (
     <LoginForm
       isSignIn={isSignIn}
       name={name}
       email={email}
       password={password}
-      errormessage={errormessage}
+      errormessage={errorMessage}
       toggleSignInForm={toggleSignInForm}
       handleButtonClick={handleButtonClick}
     />

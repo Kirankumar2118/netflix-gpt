@@ -79,6 +79,7 @@ export default function Head() {
               md:py-1.5
               md:text-sm
             "
+            onClick={() => navigate("/GPTsearch")}
           >
             GPT Search
           </button>

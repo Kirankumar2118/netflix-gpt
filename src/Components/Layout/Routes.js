@@ -8,6 +8,7 @@ import PublicRoute from "./PublicRoute";
 import Explorer from "../../Pages/Explorer";
 import SearchResult from "../../Pages/SearchResult";
 import Details from "../../Pages/Details ";
+import GptSearch from "../../Pages/GptSearch";
 
 export const appRouter = createBrowserRouter([
   {
@@ -48,6 +49,14 @@ export const appRouter = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <Details />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/GPTsearch",
+    element: (
+      <ProtectedRoute>
+        <GptSearch />
       </ProtectedRoute>
     ),
   },

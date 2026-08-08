@@ -17,8 +17,8 @@ const Trending = () => {
     <section>
       <ContentWrapper>
         {/* Header */}
-        <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <h2 className="text-2xl font-semibold text-white md:text-3xl">
+        <div className="mb-5 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <h2 className="text-2xl font-bold text-white sm:text-3xl">
             Trending
           </h2>
 

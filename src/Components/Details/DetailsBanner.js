@@ -13,7 +13,6 @@ import BannerPoster from "./detailsbanner/BannerPoster";
 import BannerContent from "./detailsbanner/BannerContent";
 import BannerInfo from "./detailsbanner/BannerInfo";
 import BannerCrew from "./detailsbanner/BannerCrew";
-import BannerSkeleton from "./detailsbanner/BannerSkeleton";
 
 const DetailsBanner = ({ video, crew }) => {
   const { mediaType, id } = useParams();
@@ -34,21 +33,29 @@ const DetailsBanner = ({ video, crew }) => {
       ["Screenplay", "Story", "Writer"].includes(person.job),
     ) || [];
 
-  if (loading) return <BannerSkeleton />;
+  if (loading) return null;
 
   if (!data) return null;
 
   return (
-    <section className="relative w-full bg-black pb-12 pt-24 md:min-h-[700px] md:pt-32">
-      <BannerBackdrop backdrop={url?.backdrop + data.backdrop_path} />
+    <section className="relative overflow-hidden">
+      <BannerBackdrop
+        backdrop={
+          data.backdrop_path ? url?.backdrop + data.backdrop_path : null
+        }
+      />
 
       <ContentWrapper>
-        <div className="relative flex flex-col gap-8 md:flex-row md:gap-12">
-          <BannerPoster
-            poster={data?.poster_path ? url?.backdrop + data.poster_path : null}
-          />
+        <div className="relative flex flex-col gap-6 py-6 sm:gap-8 sm:py-8 md:flex-row md:gap-12 md:py-12">
+          {/* Poster */}
+          <div className="mx-auto w-[180px] flex-shrink-0 sm:w-[220px] md:mx-0 md:w-[280px] lg:w-[320px]">
+            <BannerPoster
+              poster={data.poster_path ? url?.poster + data.poster_path : null}
+            />
+          </div>
 
-          <div className="flex-1">
+          {/* Details */}
+          <div className="min-w-0 flex-1">
             <BannerContent
               data={data}
               genres={genres}

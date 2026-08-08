@@ -1,16 +1,18 @@
 import React, { useEffect } from "react";
 import { RouterProvider } from "react-router-dom";
-import { appRouter } from "./Routes";
 import { onAuthStateChanged } from "firebase/auth";
+import { useDispatch } from "react-redux";
+
 import { auth } from "../../Utils/Firebase";
-import { useDispatch, useSelector } from "react-redux";
-import { addUser, removeUser } from "../../Redux/Userslice";
 import { fetchDatafromApi } from "../../Utils/Api";
+import { appRouter } from "./Routes";
+
+import { addUser, removeUser } from "../../Redux/Userslice";
 import { getApiConfiguration, getGenerse } from "../../Redux/HomeSlice";
 
 const Body = () => {
   const dispatch = useDispatch();
-  const { url } = useSelector((state) => state.home);
+
   useEffect(() => {
     fetchApiConfiguration();
     genresCall();
@@ -18,41 +20,47 @@ const Body = () => {
 
   const fetchApiConfiguration = async () => {
     const data = await fetchDatafromApi("/configuration");
-    const url = {
-      backdrop: data.images.secure_base_url + "original",
-      poster: data.images.secure_base_url + "original",
-      profile: data.images.secure_base_url + "original",
-    };
-    dispatch(getApiConfiguration(url));
+
+    dispatch(
+      getApiConfiguration({
+        backdrop: data.images.secure_base_url + "original",
+        poster: data.images.secure_base_url + "original",
+        profile: data.images.secure_base_url + "original",
+      }),
+    );
   };
 
   const genresCall = async () => {
-    let promises = [];
-    let endPoints = ["tv", "movie"];
-    let allGenres = {};
+    const endpoints = ["tv", "movie"];
 
-    endPoints.forEach((url) => {
-      promises.push(fetchDatafromApi(`/genre/${url}/list`));
+    const responses = await Promise.all(
+      endpoints.map((type) => fetchDatafromApi(`/genre/${type}/list`)),
+    );
+
+    const allGenres = {};
+
+    responses.forEach(({ genres }) => {
+      genres.forEach((genre) => {
+        allGenres[genre.id] = genre;
+      });
     });
 
-    const data = await Promise.all(promises);
-
-    data?.map(({ genres }) => {
-      return genres.map((item) => (allGenres[item.id] = item));
-    });
     dispatch(getGenerse(allGenres));
   };
+
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
-        const { uid, email, displayName, photoURL } = user;
+        await user.reload();
+
+        const updatedUser = auth.currentUser;
 
         dispatch(
           addUser({
-            uid,
-            email,
-            displayName,
-            photoURL,
+            uid: updatedUser.uid,
+            email: updatedUser.email,
+            displayName: updatedUser.displayName,
+            photoURL: updatedUser.photoURL,
           }),
         );
       } else {
@@ -60,14 +68,10 @@ const Body = () => {
       }
     });
 
-    return unsubscribe;
+    return () => unsubscribe();
   }, [dispatch]);
 
-  return (
-    <div>
-      <RouterProvider router={appRouter} />
-    </div>
-  );
+  return <RouterProvider router={appRouter} />;
 };
 
 export default Body;
