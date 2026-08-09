@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { RouterProvider } from "react-router-dom";
+import { RouterProvider, useLocation } from "react-router-dom";
 import { onAuthStateChanged } from "firebase/auth";
 import { useDispatch } from "react-redux";
 
@@ -12,6 +12,11 @@ import { getApiConfiguration, getGenerse } from "../../Redux/HomeSlice";
 
 const Body = () => {
   const dispatch = useDispatch();
+  const location = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
 
   useEffect(() => {
     const fetchApiConfiguration = async () => {
