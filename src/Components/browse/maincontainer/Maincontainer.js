@@ -23,9 +23,11 @@ const Maincontainer = () => {
   const { id, title, overview } = mainMovie;
 
   return (
-    <section className="relative min-h-screen w-full overflow-hidden bg-black">
+    <section className="relative h-[70vh] min-h-[500px] w-full overflow-hidden sm:h-[75vh] md:h-screen">
+      {/* Trailer */}
       <Videoplay movieid={id} />
 
+      {/* Movie information */}
       <div className="absolute inset-0 z-20">
         <Vediotitle title={title} overview={overview} id={id} />
       </div>
