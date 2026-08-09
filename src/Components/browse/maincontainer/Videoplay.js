@@ -7,53 +7,69 @@ const Videoplay = ({ movieid }) => {
 
   useGettrailer(movieid);
 
-  if (!trailer?.key) {
-    return null;
-  }
+  if (!trailer?.key) return null;
+
+  const videoUrl =
+    `https://www.youtube.com/embed/${trailer.key}` +
+    `?autoplay=1` +
+    `&mute=1` +
+    `&controls=0` +
+    `&loop=1` +
+    `&playlist=${trailer.key}` +
+    `&playsinline=1` +
+    `&rel=0` +
+    `&iv_load_policy=3` +
+    `&disablekb=1`;
 
   return (
-    <section className="absolute inset-0 overflow-hidden">
-      {/* Trailer */}
+    <section className="absolute inset-0 overflow-hidden bg-black">
+      {/* YouTube Trailer */}
       <iframe
-        className="absolute inset-0 h-full w-full border-0"
-        src={`https://www.youtube.com/embed/${trailer.key}?autoplay=1&mute=1&playsinline=1`}
+        className="
+          pointer-events-none
+          absolute
+          left-1/2
+          top-1/2
+          h-[56.25vw]
+          w-[177.78vw]
+          min-h-[100vh]
+          min-w-[177.78vh]
+          -translate-x-1/2
+          -translate-y-1/2
+          border-0
+        "
+        src={videoUrl}
         title="Movie Trailer"
         referrerPolicy="strict-origin-when-cross-origin"
         allow="autoplay; encrypted-media; picture-in-picture"
         allowFullScreen
       />
 
-      {/* Left Gradient */}
+      {/* Left Cinematic Gradient */}
       <div
         className="
           pointer-events-none
           absolute
-          inset-y-0
-          left-0
-          w-3/4
-          sm:w-1/2
-          md:w-1/3
+          inset-0
           bg-gradient-to-r
           from-black
-          via-black/55
+          via-black/60
           to-transparent
         "
       />
 
-      {/* Bottom Gradient */}
+      {/* Bottom Cinematic Gradient */}
       <div
         className="
           pointer-events-none
           absolute
           inset-x-0
           bottom-0
-          h-56
+          h-72
           bg-gradient-to-t
           from-black
-          via-black/70
+          via-black/75
           to-transparent
-          sm:h-64
-          md:h-72
         "
       />
 
@@ -64,13 +80,15 @@ const Videoplay = ({ movieid }) => {
           absolute
           inset-x-0
           top-0
-          h-24
+          h-32
           bg-gradient-to-b
           from-black/80
           to-transparent
-          md:h-36
         "
       />
+
+      {/* Subtle Overall Overlay */}
+      <div className="pointer-events-none absolute inset-0 bg-black/10" />
     </section>
   );
 };
