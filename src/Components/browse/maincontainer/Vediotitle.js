@@ -7,7 +7,7 @@ const Vediotitle = ({ title, overview, id }) => {
   const navigate = useNavigate();
 
   return (
-    <div className="absolute inset-0 z-20 flex items-center bg-gradient-to-r from-black via-black/60 to-transparent">
+    <div className="absolute inset-0 z-20 flex items-center">
       <div
         className="
           w-full
@@ -20,6 +20,10 @@ const Vediotitle = ({ title, overview, id }) => {
           mt-24
           md:mt-32
           lg:mt-40
+          bg-gradient-to-r
+          from-black
+          via-black/60
+          to-transparent
         "
       >
         {/* Title */}
