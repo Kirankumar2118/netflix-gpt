@@ -13,7 +13,6 @@ const Videoplay = ({ movieid }) => {
 
   return (
     <section className="absolute inset-0 overflow-hidden">
-      {/* Trailer */}
       <iframe
         className="
           absolute
@@ -31,11 +30,11 @@ const Videoplay = ({ movieid }) => {
         "
         src={`https://www.youtube.com/embed/${trailer.key}?autoplay=1&mute=1&playsinline=1`}
         title="Movie Trailer"
+        referrerPolicy="strict-origin-when-cross-origin"
         allow="autoplay; encrypted-media; picture-in-picture"
         allowFullScreen
       />
 
-      {/* Left Gradient */}
       <div
         className="
           pointer-events-none
@@ -48,7 +47,6 @@ const Videoplay = ({ movieid }) => {
         "
       />
 
-      {/* Bottom Gradient */}
       <div
         className="
           pointer-events-none
@@ -65,7 +63,6 @@ const Videoplay = ({ movieid }) => {
         "
       />
 
-      {/* Top Gradient */}
       <div
         className="
           pointer-events-none
