@@ -28,7 +28,11 @@ const Videoplay = ({ movieid }) => {
         className="
           pointer-events-none
           absolute
-          inset-0
+          inset-y-0
+          left-0
+          w-3/4
+          sm:w-1/2
+          md:w-1/3
           bg-gradient-to-r
           from-black
           via-black/55
