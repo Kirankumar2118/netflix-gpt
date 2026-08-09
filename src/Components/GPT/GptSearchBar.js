@@ -1,14 +1,16 @@
 import React, { useEffect, useRef } from "react";
 import lang, { supported_lang } from "../../Utils/langconst";
 import { useDispatch, useSelector } from "react-redux";
+
 import { changelanguage } from "../../Redux/configSlice";
 import {
   addgptmovieresults,
   clearGptMovies,
   setGptLoading,
 } from "../../Redux/GptSlice";
+
 import Openai from "../../Utils/Openai";
-import { options, tmdbFetchUrl } from "../../Utils/Apioptions";
+import { fetchDatafromApi } from "../../Utils/Api";
 
 const GptSearchBar = () => {
   const dispatch = useDispatch();
@@ -27,19 +29,14 @@ const GptSearchBar = () => {
   }, [dispatch]);
 
   const searchMovieTMDB = async (movie) => {
-    const data = await fetch(
-      tmdbFetchUrl("/search/movie", {
-        query: movie,
-        include_adult: false,
-        language: "en-US",
-        page: 1,
-      }),
-      options,
-    );
+    const data = await fetchDatafromApi("/search/movie", {
+      query: movie,
+      include_adult: false,
+      language: "en-US",
+      page: 1,
+    });
 
-    const json = await data.json();
-
-    return json.results?.[0] || null;
+    return data?.results?.[0] || null;
   };
 
   const handleGptSearch = async () => {
@@ -99,8 +96,8 @@ const GptSearchBar = () => {
       <input
         ref={searchtext}
         type="text"
-        placeholder={lang[langkey].gptplaceholder}
-        className="min-w-0 flex-1 rounded-xl bg-neutral-900 px-3 py-3 text-sm text-white outline-none placeholder:text-gray-400 focus:ring-1 focus:ring-red-600 sm:px-4 sm:text-base"
+        placeholder={lang[langkey].GptSearchPlaceholder}
+        className="min-w-0 flex-1 rounded-xl border border-gray-600 bg-gray-900 px-3 py-2 text-xs text-white outline-none placeholder:text-gray-500 focus:border-red-600 sm:px-4 sm:py-3 sm:text-base"
       />
 
       {/* Search Button */}
