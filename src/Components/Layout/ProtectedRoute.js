@@ -1,5 +1,6 @@
 import { Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import ScrollToTop from "./ScrollToTop";
 
 const ProtectedRoute = ({ children }) => {
   const user = useSelector((store) => store.user);
@@ -8,7 +9,12 @@ const ProtectedRoute = ({ children }) => {
     return <Navigate to="/" replace />;
   }
 
-  return children;
+  return (
+    <>
+      <ScrollToTop />
+      {children}
+    </>
+  );
 };
 
 export default ProtectedRoute;
