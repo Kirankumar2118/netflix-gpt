@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from "react";
 import { useDispatch } from "react-redux";
 
-import { options } from "../Utils/Apioptions";
+import { options, tmdbFetchUrl } from "../Utils/Apioptions";
 import { addtarilervedio } from "../Redux/Movieslice";
 
 const useGettrailer = (movieid) => {
@@ -12,7 +12,7 @@ const useGettrailer = (movieid) => {
 
     try {
       const response = await fetch(
-        `https://api.themoviedb.org/3/movie/${movieid}/videos`,
+        tmdbFetchUrl(`/movie/${movieid}/videos`),
         options,
       );
 

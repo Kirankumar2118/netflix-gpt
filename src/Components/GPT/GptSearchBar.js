@@ -8,7 +8,7 @@ import {
   setGptLoading,
 } from "../../Redux/GptSlice";
 import Openai from "../../Utils/Openai";
-import { options } from "../../Utils/Apioptions";
+import { options, tmdbFetchUrl } from "../../Utils/Apioptions";
 
 const GptSearchBar = () => {
   const dispatch = useDispatch();
@@ -28,9 +28,12 @@ const GptSearchBar = () => {
 
   const searchMovieTMDB = async (movie) => {
     const data = await fetch(
-      `https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(
-        movie,
-      )}&include_adult=false&language=en-US&page=1`,
+      tmdbFetchUrl("/search/movie", {
+        query: movie,
+        include_adult: false,
+        language: "en-US",
+        page: 1,
+      }),
       options,
     );
 
