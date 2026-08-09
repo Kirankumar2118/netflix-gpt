@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from "react";
 import { useDispatch } from "react-redux";
 
-import { options, tmdbFetchUrl } from "../Utils/Apioptions";
+import { fetchDatafromApi } from "../Utils/Api";
 import { addtarilervedio } from "../Redux/Movieslice";
 
 const useGettrailer = (movieid) => {
@@ -11,15 +11,11 @@ const useGettrailer = (movieid) => {
     if (!movieid) return;
 
     try {
-      const response = await fetch(
-        tmdbFetchUrl(`/movie/${movieid}/videos`),
-        options,
-      );
-
-      const { results } = await response.json();
+      const data = await fetchDatafromApi(`/movie/${movieid}/videos`);
 
       const trailerVideo =
-        results?.find((video) => video.type === "Trailer") || results?.[0];
+        data?.results?.find((video) => video.type === "Trailer") ||
+        data?.results?.[0];
 
       dispatch(addtarilervedio(trailerVideo));
     } catch (error) {
